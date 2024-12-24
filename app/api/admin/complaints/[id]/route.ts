@@ -1,0 +1,1 @@
+<content of admin/complaints/[id]/route.ts>

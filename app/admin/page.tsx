@@ -1,0 +1,1 @@
+<content of admin/page.tsx>
