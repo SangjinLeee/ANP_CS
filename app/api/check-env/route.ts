@@ -1,1 +1,0 @@
-<content of check-env/route.ts>
