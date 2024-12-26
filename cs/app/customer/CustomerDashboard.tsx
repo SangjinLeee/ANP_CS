@@ -12,28 +12,34 @@ import {
   TableRow,
 } from '@/components/ui/table';
 
+interface Complaint {
+  id: number;
+  customer: string;
+  product: string;
+  lotNumber: string;
+  complaintReport: string;
+  dateOfProduction: string;
+}
+
 export function CustomerDashboard() {
-  const [complaints, setComplaints] = useState([]);
+  const [complaints, setComplaints] = useState<Complaint[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
   const [search, setSearch] = useState('');
 
   useEffect(() => {
     const fetchComplaints = async () => {
       try {
-        setIsLoading(true);
         const response = await fetch('/api/complaints');
-        if (!response.ok) {
-          throw new Error('Failed to fetch complaints');
-        }
         const data = await response.json();
         if (Array.isArray(data)) {
           setComplaints(data);
         } else {
-          throw new Error('Invalid data format');
+          setComplaints([]);
         }
       } catch (err) {
-        setError(err.message);
+        setError('Failed to fetch complaints');
+        console.error(err);
       } finally {
         setIsLoading(false);
       }
@@ -43,17 +49,15 @@ export function CustomerDashboard() {
   }, []);
 
   const filteredComplaints = complaints.filter((complaint) =>
-    complaint.product.toLowerCase().includes(search.toLowerCase()) ||
-    complaint.customer.toLowerCase().includes(search.toLowerCase()) ||
-    complaint.lotNumber.toLowerCase().includes(search.toLowerCase())
+    [complaint.product, complaint.customer, complaint.lotNumber]
+      .some((field) => field.toLowerCase().includes(search.toLowerCase()))
   );
 
   return (
     <div className="min-h-screen bg-gray-50 p-4">
       <div className="max-w-6xl mx-auto">
         <h1 className="text-2xl font-bold mb-4">Customer Complaint Dashboard</h1>
-        
-        {/* Search Input */}
+
         <div className="mb-6">
           <Input
             placeholder="Search by product, customer, or lot number"
@@ -61,8 +65,7 @@ export function CustomerDashboard() {
             onChange={(e) => setSearch(e.target.value)}
           />
         </div>
-        
-        {/* Complaints Table */}
+
         {isLoading ? (
           <p>Loading complaints...</p>
         ) : error ? (
