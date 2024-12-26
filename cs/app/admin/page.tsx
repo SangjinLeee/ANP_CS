@@ -1,5 +1,12 @@
+'use client';
+
 import { AdminDashboard } from './AdminDashboard';
+import { CenteredLayout } from '@/components/ui/CenteredLayout';
 
 export default function AdminPage() {
-  return <AdminDashboard />;
+  return (
+    <CenteredLayout>
+      <AdminDashboard />
+    </CenteredLayout>
+  );
 }
