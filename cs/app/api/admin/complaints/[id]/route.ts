@@ -1,73 +1,77 @@
 import { NextResponse } from 'next/server';
+import { RowDataPacket, OkPacket } from 'mysql2';
 import pool from '@/lib/mysql';
 
+// GET: 특정 Complaint 조회
 export async function GET(
   request: Request,
   { params }: { params: { id: string } }
 ): Promise<NextResponse> {
   try {
     // params 확인
-    if (!params || !params.id) {
-      console.error('GET error: Missing "id" parameter');
+    if (!params?.id) {
       return NextResponse.json({ error: 'Missing "id" parameter' }, { status: 400 });
     }
 
     const { id } = params;
 
-    // 데이터베이스 조회
-    const [rows]: [any[], any] = await pool.query('SELECT * FROM complaints WHERE id = ?', [id]);
+    // 데이터베이스에서 특정 Complaint 조회
+    const [rows]: [RowDataPacket[]] = await pool.query(
+      'SELECT * FROM complaints WHERE id = ?',
+      [id]
+    );
 
-    if (!Array.isArray(rows) || rows.length === 0) {
-      console.warn(`GET warning: Complaint with id=${id} not found`);
-      return NextResponse.json({ error: 'Complaint not found' }, { status: 404 });
+    if (rows.length === 0) {
+      return NextResponse.json({ error: `Complaint with id=${id} not found` }, { status: 404 });
     }
 
-    console.info(`GET success: Complaint retrieved for id=${id}`);
-    return NextResponse.json(rows[0]);
+    return NextResponse.json(rows[0], { status: 200 });
   } catch (error) {
-    console.error('GET error:', error instanceof Error ? error.message : 'Unknown error');
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+    console.error('GET error:', errorMessage);
     return NextResponse.json(
-      { error: 'Failed to fetch complaint', details: error instanceof Error ? error.message : 'Unknown error' },
+      { error: 'Failed to fetch complaint', details: errorMessage },
       { status: 500 }
     );
   }
 }
 
+// PATCH: 특정 Complaint 업데이트
 export async function PATCH(
   request: Request,
   { params }: { params: { id: string } }
 ): Promise<NextResponse> {
   try {
     // params 확인
-    if (!params || !params.id) {
-      console.error('PATCH error: Missing "id" parameter');
+    if (!params?.id) {
       return NextResponse.json({ error: 'Missing "id" parameter' }, { status: 400 });
     }
 
     const { id } = params;
     const body = await request.json();
-    const { status } = body;
+    const { status }: { status: string } = body;
 
     // 필수 필드 확인
     if (!status) {
-      console.error('PATCH error: Missing "status" field');
       return NextResponse.json({ error: 'Missing "status" field' }, { status: 400 });
     }
 
-    // 데이터베이스 업데이트
-    const [result]: any = await pool.query('UPDATE complaints SET status = ? WHERE id = ?', [status, id]);
+    // 데이터베이스에서 특정 Complaint 업데이트
+    const [result]: [OkPacket] = await pool.query(
+      'UPDATE complaints SET status = ? WHERE id = ?',
+      [status, id]
+    );
 
-    if (!result || result.affectedRows === 0) {
-      console.warn(`PATCH warning: Complaint with id=${id} not found`);
-      return NextResponse.json({ error: 'Complaint not found' }, { status: 404 });
+    if (result.affectedRows === 0) {
+      return NextResponse.json({ error: `Complaint with id=${id} not found` }, { status: 404 });
     }
 
-    console.info(`PATCH success: Complaint with id=${id} updated to status=${status}`);
-    return NextResponse.json({ message: 'Complaint updated successfully' });
+    return NextResponse.json({ message: `Complaint with id=${id} updated successfully` }, { status: 200 });
   } catch (error) {
-    console.error('PATCH error:', error instanceof Error ? error.message : 'Unknown error');
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+    console.error('PATCH error:', errorMessage);
     return NextResponse.json(
-      { error: 'Failed to update complaint', details: error instanceof Error ? error.message : 'Unknown error' },
+      { error: 'Failed to update complaint', details: errorMessage },
       { status: 500 }
     );
   }
