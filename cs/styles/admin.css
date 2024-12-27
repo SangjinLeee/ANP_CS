@@ -1,97 +1,131 @@
 /* General Styles */
 .container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .card {
-    background: #ffffff;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    margin-bottom: 20px;
-    padding: 20px;
-  }
-  
-  .card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-  }
-  
-  .card-title {
-    font-size: 24px;
-    font-weight: bold;
-    color: #333;
-  }
-  
-  .button {
-    background-color: #007bff;
-    color: #fff;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    text-align: center;
-  }
-  
-  .button:hover {
-    background-color: #0056b3;
-  }
-  
-  /* Table Styles */
-  .table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-  }
-  
-  .table th, .table td {
-    text-align: left;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.card {
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 더 부드러운 그림자 */
+  width: 100%;
+  margin-bottom: 20px;
+  padding: 20px;
+  transition: transform 0.2s, box-shadow 0.2s; /* 호버 시 애니메이션 추가 */
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.card-title {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+}
+
+.button {
+  background-color: #007bff;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  text-align: center;
+  transition: background-color 0.2s, transform 0.2s; /* 호버 애니메이션 추가 */
+}
+
+.button:hover {
+  background-color: #0056b3;
+  transform: scale(1.05); /* 버튼 크기 살짝 확대 */
+}
+
+/* Table Styles */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.table th,
+.table td {
+  text-align: left;
+  padding: 10px;
+  border: 1px solid #ddd;
+}
+
+.table th {
+  background-color: #f4f4f4;
+  font-weight: bold;
+}
+
+.table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.table tr:hover {
+  background-color: #f1f1f1;
+  transition: background-color 0.2s; /* 호버 애니메이션 추가 */
+}
+
+/* Status Badge */
+.inline-block {
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.bg-yellow-100 {
+  background-color: #fffbea;
+  color: #a16207;
+}
+
+.bg-blue-100 {
+  background-color: #e7f5ff;
+  color: #1e40af;
+}
+
+.bg-green-100 {
+  background-color: #d1fae5;
+  color: #065f46;
+}
+
+/* 추가: 반응형 레이아웃 */
+@media (max-width: 768px) {
+  .container {
     padding: 10px;
-    border: 1px solid #ddd;
   }
-  
-  .table th {
-    background-color: #f4f4f4;
-    font-weight: bold;
+
+  .card {
+    padding: 15px;
   }
-  
-  .table tr:nth-child(even) {
-    background-color: #f9f9f9;
+
+  .card-title {
+    font-size: 20px;
   }
-  
-  .table tr:hover {
-    background-color: #f1f1f1;
+
+  .button {
+    padding: 8px 16px;
+    font-size: 14px;
   }
-  
-  /* Status Badge */
-  .inline-block {
-    display: inline-block;
-    padding: 5px 10px;
-    border-radius: 12px;
-    font-size: 12px;
-    font-weight: bold;
-    text-transform: uppercase;
+
+  .table th,
+  .table td {
+    padding: 8px;
   }
-  
-  .bg-yellow-100 {
-    background-color: #fffbea;
-    color: #a16207;
-  }
-  
-  .bg-blue-100 {
-    background-color: #e7f5ff;
-    color: #1e40af;
-  }
-  
-  .bg-green-100 {
-    background-color: #d1fae5;
-    color: #065f46;
-  }
-  
+}
