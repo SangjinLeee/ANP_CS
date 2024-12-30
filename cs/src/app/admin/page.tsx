@@ -12,26 +12,19 @@ interface Report {
 }
 
 export default function AdminPage() {
-  const [reports, setReports] = useState<Report[]>([]);
+  const [reports, setReports] = useState<Report[]>([]); // 타입 지정
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchReports() {
       try {
         const response = await fetch('/api/reports');
-        const data = await response.json();
-
-        // 데이터 검증
-        if (!Array.isArray(data)) {
-          throw new Error('Invalid data format');
-        }
-
+        const data: Report[] = await response.json(); // 데이터 타입 지정
         setReports(data);
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Unknown error occurred');
+        setError('Failed to fetch reports');
       }
     }
-
     fetchReports();
   }, []);
 
